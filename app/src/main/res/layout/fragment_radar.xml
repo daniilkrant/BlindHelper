@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.android.protech.blindhelper.RadarFragment">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/beacon_image"
+        android:layout_weight="5"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/beacon_title"
+        android:gravity="center"
+        android:layout_margin="16dp"
+        android:textSize="16sp"
+        android:layout_weight="1"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/beacon_description"
+        android:layout_margin="16dp"
+        android:layout_weight="1"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/beacon_call"
+        android:text="@string/beacon_call"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1.5"/>
+
+</LinearLayout>
