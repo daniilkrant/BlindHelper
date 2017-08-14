@@ -1,11 +1,9 @@
 package com.android.protech.blindhelper;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.os.Vibrator;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,31 +11,20 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-
-import org.altbeacon.beacon.Beacon;
-import org.altbeacon.beacon.BeaconConsumer;
-import org.altbeacon.beacon.BeaconManager;
-import org.altbeacon.beacon.BeaconParser;
-import org.altbeacon.beacon.RangeNotifier;
-import org.altbeacon.beacon.Region;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-public class RadarActivity extends AppCompatActivity implements BeaconConsumer {
+public class RadarActivity extends AppCompatActivity {
 
     private static final String TAG = "BEACON_PROJECT";
     private ArrayList<BlindBeacon> beaconArrayList = new ArrayList<>();
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private PagerAdapter pagerAdapter;
-    private BeaconManager beaconManager;
     private Vibrator v;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +36,22 @@ public class RadarActivity extends AppCompatActivity implements BeaconConsumer {
         pagerAdapter = new FragmentAdaptor(getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager,true);
-        this.beaconManager = BeaconManager.getInstanceForApplication(this);
-        this.beaconManager.getBeaconParsers().add(new BeaconParser().
-                setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
-        this.beaconManager.setBackgroundBetweenScanPeriod(6000);
-        this.beaconManager.setBackgroundScanPeriod(6000);
-        this.beaconManager.setForegroundBetweenScanPeriod(6000);
-        this.beaconManager.setForegroundScanPeriod(6000);
-        this.beaconManager.bind(this);
 
+        WiFiRoutine.getInstance().initWifi(getApplicationContext());
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        beaconArrayList = WiFiRoutine.getInstance().getNearbyBeacons();
+                        pagerAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        },0,5000);
     }
 
     @Override
@@ -68,38 +62,8 @@ public class RadarActivity extends AppCompatActivity implements BeaconConsumer {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        this.beaconManager.unbind(this);
+        beaconArrayList.clear();
     }
-
-    @Override
-    public void onBeaconServiceConnect() {
-        this.beaconManager.addRangeNotifier(new RangeNotifier() {
-            @Override
-            public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                if (beacons.size() > 0) {
-                     beaconArrayList.clear();
-                    for (Beacon beacon : beacons) {
-                        Log.d("TAG", Integer.toString(beaconArrayList.size()));
-                        beaconArrayList.add(new BlindBeacon(beacon.getBluetoothAddress(),beacon.getDistance(), beacon.getBluetoothName()));
-                    }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            pagerAdapter.notifyDataSetChanged();
-                        }
-                    });
-                }
-            }
-        });
-
-
-        try {
-            this.beaconManager.startRangingBeaconsInRegion(new Region("MyRegionId", null, null, null));
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     private class FragmentAdaptor extends FragmentPagerAdapter {
 
@@ -115,7 +79,6 @@ public class RadarActivity extends AppCompatActivity implements BeaconConsumer {
         @Override
         public int getCount() {
             if (beaconArrayList!=null){
-                Log.d("TAG", Integer.toString(beaconArrayList.size()));
                 return beaconArrayList.size();
             }
             else return 0;

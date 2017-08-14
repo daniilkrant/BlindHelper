@@ -18,7 +18,6 @@ public class RadarFragment extends Fragment {
 
     ArrayList<BlindBeacon> beaconArrayList;
     int pageNumber;
-    ImageView beacon_image;
     TextView beacon_description, beacon_title;
     Button beacon_call;
 
@@ -41,19 +40,33 @@ public class RadarFragment extends Fragment {
         super.onCreate(savedInstanceState);
         beaconArrayList = getArguments().getParcelableArrayList(Data.ARGUMENT_BEACON_LIST);
         pageNumber = getArguments().getInt(Data.ARGUMENT_PAGE_NUMBER);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_radar, container, false);
-        beacon_image = (ImageView) view.findViewById(R.id.beacon_image);
         beacon_description = (TextView) view.findViewById(R.id.beacon_description);
         beacon_title = (TextView) view.findViewById(R.id.beacon_title);
         beacon_call = (Button) view.findViewById(R.id.beacon_call);
 
         beacon_title.setText(beaconArrayList.get(pageNumber).getName());
+        beacon_call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                WiFiRoutine.getInstance().connect(beaconArrayList.get(pageNumber).getUuid());
+                try {
+                    Thread.sleep(1500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                WiFiRoutine.getInstance().disconnect(beaconArrayList.get(pageNumber).getUuid());
+            }
+        });
         return view;
     }
+
+
 
 }

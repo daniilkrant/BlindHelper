@@ -5,31 +5,32 @@
     android:orientation="vertical"
     tools:context="com.android.protech.blindhelper.RadarFragment">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/beacon_image"
-        android:layout_weight="5"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/beacon_title"
         android:gravity="center"
-        android:layout_margin="16dp"
+        android:layout_margin="8dp"
         android:textSize="16sp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:contentDescription="Название маяка"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/beacon_description"
-        android:layout_margin="16dp"
-        android:layout_weight="1"/>
+        android:text="DESCRIPTION"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:layout_margin="8dp"
+        android:layout_weight="1"
+        android:contentDescription="Описание маячка"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/beacon_call"
         android:text="@string/beacon_call"
         android:layout_marginBottom="8dp"
-        android:layout_weight="1.5"/>
+        android:layout_weight="2"
+        android:contentDescription="Включение звукового сигнала"/>
 
 </LinearLayout>

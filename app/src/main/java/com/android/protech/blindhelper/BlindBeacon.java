@@ -3,18 +3,12 @@ package com.android.protech.blindhelper;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class BlindBeacon implements Parcelable{
-    String uuid;
-    double distance;
-    String name;
-    boolean isAlive;
-
-
+public class BlindBeacon implements Parcelable {
     protected BlindBeacon(Parcel in) {
         uuid = in.readString();
-        distance = in.readFloat();
         name = in.readString();
-        isAlive = in.readByte() != 0;
+        description = in.readString();
+        location = in.readString();
     }
 
     public static final Creator<BlindBeacon> CREATOR = new Creator<BlindBeacon>() {
@@ -29,26 +23,12 @@ public class BlindBeacon implements Parcelable{
         }
     };
 
-    public BlindBeacon(String uuid, double distance, String name) {
-        this.uuid = uuid;
-        this.distance = distance;
-        this.name = name;
-    }
-
     public String getUuid() {
         return uuid;
     }
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
-    }
-
-    public double getDistance() {
-        return distance;
-    }
-
-    public void setDistance(float distance) {
-        this.distance = distance;
     }
 
     public String getName() {
@@ -59,12 +39,31 @@ public class BlindBeacon implements Parcelable{
         this.name = name;
     }
 
-    public boolean isAlive() {
-        return isAlive;
+    public String getDescription() {
+        return description;
     }
 
-    public void setAlive(boolean alive) {
-        isAlive = alive;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    String uuid;
+    String name;
+    String description;
+    String location;
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+
+    public BlindBeacon(String uuid) {
+        this.uuid = uuid;
+        this.name = uuid; //TODO: Delete after requests adding
     }
 
     @Override
@@ -75,8 +74,8 @@ public class BlindBeacon implements Parcelable{
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(uuid);
-        parcel.writeDouble(distance);
         parcel.writeString(name);
-        parcel.writeByte((byte) (isAlive ? 1 : 0));
+        parcel.writeString(description);
+        parcel.writeString(location);
     }
 }
