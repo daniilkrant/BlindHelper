@@ -1,6 +1,7 @@
 package com.android.protech.blindhelper;
 
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.TextViewCompat;
@@ -18,7 +19,7 @@ public class RadarFragment extends Fragment {
 
     ArrayList<BlindBeacon> beaconArrayList;
     int pageNumber;
-    TextView beacon_description, beacon_title;
+    TextView beacon_description, beacon_title, beacon_location;
     Button beacon_call;
 
     public RadarFragment() {
@@ -50,23 +51,36 @@ public class RadarFragment extends Fragment {
         beacon_description = (TextView) view.findViewById(R.id.beacon_description);
         beacon_title = (TextView) view.findViewById(R.id.beacon_title);
         beacon_call = (Button) view.findViewById(R.id.beacon_call);
+        beacon_location = (TextView) view.findViewById(R.id.beacon_location);
 
         beacon_title.setText(beaconArrayList.get(pageNumber).getName());
+        beacon_description.setText(beaconArrayList.get(pageNumber).getDescription());
+        beacon_location.setText(beaconArrayList.get(pageNumber).getAddr());
+
         beacon_call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WiFiRoutine.getInstance().connect(beaconArrayList.get(pageNumber).getUuid());
-                try {
-                    Thread.sleep(1500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                WiFiRoutine.getInstance().disconnect(beaconArrayList.get(pageNumber).getUuid());
+                ConnectAndDisconnect connectAndDisconnect = new ConnectAndDisconnect();
+                connectAndDisconnect.execute();
             }
         });
         return view;
     }
 
 
+    private class ConnectAndDisconnect extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            WiFiRoutine.getInstance().connect(beaconArrayList.get(pageNumber).getSsid());
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            WiFiRoutine.getInstance().disconnect(beaconArrayList.get(pageNumber).getSsid());
+            return null;
+        }
+    }
 
 }

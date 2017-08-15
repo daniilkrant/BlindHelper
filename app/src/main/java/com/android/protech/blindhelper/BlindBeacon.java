@@ -3,12 +3,40 @@ package com.android.protech.blindhelper;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class BlindBeacon implements Parcelable {
+
+    @SerializedName("HEX(MAC)")
+    @Expose
+    String uuid;
+    @SerializedName("Description")
+    @Expose
+    String description;
+    @SerializedName("Name")
+    @Expose
+    String name;
+    @SerializedName("Lng")
+    @Expose
+    private String lng;
+    @SerializedName("Lat")
+    @Expose
+    private String lat;
+    @SerializedName("Address")
+    @Expose
+    private String addr;
+    private String ssid;
+
+
     protected BlindBeacon(Parcel in) {
         uuid = in.readString();
         name = in.readString();
         description = in.readString();
-        location = in.readString();
+        lng = in.readString();
+        lat = in.readString();
+        addr = in.readString();
+        ssid = in.readString();
     }
 
     public static final Creator<BlindBeacon> CREATOR = new Creator<BlindBeacon>() {
@@ -22,6 +50,25 @@ public class BlindBeacon implements Parcelable {
             return new BlindBeacon[size];
         }
     };
+
+    public BlindBeacon(){
+
+    }
+    public String getSsid() {
+        return ssid;
+    }
+
+    public void setSsid(String ssid) {
+        this.ssid = ssid;
+    }
+
+    public String getAddr() {
+        return addr;
+    }
+
+    public void setAddr(String addr) {
+        this.addr = addr;
+    }
 
     public String getUuid() {
         return uuid;
@@ -47,17 +94,16 @@ public class BlindBeacon implements Parcelable {
         this.description = description;
     }
 
-    String uuid;
-    String name;
-    String description;
-    String location;
-
     public String getLocation() {
-        return location;
+        return lat+lng;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setLng(String location) {
+        this.lng = location;
+    }
+
+    public void setLat(String location) {
+        this.lat = location;
     }
 
 
@@ -76,6 +122,9 @@ public class BlindBeacon implements Parcelable {
         parcel.writeString(uuid);
         parcel.writeString(name);
         parcel.writeString(description);
-        parcel.writeString(location);
+        parcel.writeString(lng);
+        parcel.writeString(lat);
+        parcel.writeString(addr);
+        parcel.writeString(ssid);
     }
 }

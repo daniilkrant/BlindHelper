@@ -39,6 +39,7 @@ public class RadarActivity extends AppCompatActivity {
 
         WiFiRoutine.getInstance().initWifi(getApplicationContext());
 
+
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -46,12 +47,13 @@ public class RadarActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        beaconArrayList = WiFiRoutine.getInstance().getNearbyBeacons();
-                        pagerAdapter.notifyDataSetChanged();
+                       ScanBeacons scanBeacons = new ScanBeacons();
+                       scanBeacons.execute();
+
                     }
                 });
             }
-        },0,5000);
+        },0,6000);
     }
 
     @Override
@@ -85,4 +87,17 @@ public class RadarActivity extends AppCompatActivity {
         }
     }
 
+    private class ScanBeacons extends AsyncTask{
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            beaconArrayList = ServerRoutine.getNearbyBeacons();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            pagerAdapter.notifyDataSetChanged();
+        }
+    }
 }

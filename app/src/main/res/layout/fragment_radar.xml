@@ -18,12 +18,20 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/beacon_description"
-        android:text="DESCRIPTION"
         android:textSize="14sp"
         android:gravity="center"
         android:layout_margin="8dp"
         android:layout_weight="1"
         android:contentDescription="Описание маячка"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/beacon_location"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:layout_margin="8dp"
+        android:layout_weight="0.5"
+        android:contentDescription="Месторасположение маячка"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="0dp"

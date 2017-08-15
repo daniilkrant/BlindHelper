@@ -10,6 +10,7 @@ import android.util.Log;
 import com.isupatches.wisefy.WiseFy;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 class WiFiRoutine {
@@ -18,7 +19,7 @@ class WiFiRoutine {
     private Context c;
     private WifiManager wifiManager;
     private WiseFy mWiseFy = null;
-    private ArrayList<String> pointsRegexList = new ArrayList<>();
+    private HashMap<String,String> pointsRegexList = new HashMap<String,String>();
 
     public static WiFiRoutine getInstance() {
         return ourInstance;
@@ -33,26 +34,16 @@ class WiFiRoutine {
         mWiseFy = new WiseFy.brains(c.getApplicationContext()).getSmarts();
     }
 
-    ArrayList <String> getPointsRegex(){
+    HashMap<String,String> getPointsRegex(){
         List<ScanResult> scans = mWiseFy.getNearbyAccessPoints(true);
-
+        pointsRegexList.clear();
         for (ScanResult s: scans){
-            Log.d("ssid", s.SSID);
             if (s.SSID.startsWith(Data.AP_SSID_PATTERN)){
-                pointsRegexList.add(s.SSID);
+                pointsRegexList.put("123456789AB",s.SSID);
+//                pointsRegexList.put(s.BSSID,s.SSID);
             }
         }
         return pointsRegexList;
-    }
-
-    ArrayList<BlindBeacon> getNearbyBeacons(){
-        ArrayList<BlindBeacon> blindBeacons= new ArrayList<>();
-        pointsRegexList.clear();
-        getPointsRegex();
-        for (String s: pointsRegexList){
-            blindBeacons.add(new BlindBeacon(s));
-        }
-        return blindBeacons;
     }
 
     void connect(String ssid){
