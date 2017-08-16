@@ -6,4 +6,5 @@ public class Data {
     static final String AP_SSID_PATTERN = "BlindHelper";
     static final String AP_PASS_PATTERN = "12431243";
     static final String API_BASE_URL = "http://braille-device.com/iBeacon/";
+    static final String PASS_BSSID = "bssid";
 }

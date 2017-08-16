@@ -95,7 +95,7 @@ public class BlindBeacon implements Parcelable {
     }
 
     public String getLocation() {
-        return lat+lng;
+        return lat+","+lng;
     }
 
     public void setLng(String location) {

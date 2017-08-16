@@ -28,8 +28,9 @@
         <activity
             android:name=".RadarActivity"
             android:label="@string/title_activity_radar"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".DBActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".DBActivity" />
+        <activity android:name=".BeaconDetailActivity"></activity>
     </application>
 
 </manifest>

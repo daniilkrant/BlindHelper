@@ -64,6 +64,8 @@ public class RadarFragment extends Fragment {
                 connectAndDisconnect.execute();
             }
         });
+
+
         return view;
     }
 

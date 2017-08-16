@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class DBActivity extends AppCompatActivity {
     private class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
 
         ArrayList<BlindBeacon> beacon_list = new ArrayList<>();
-
+        BlindBeacon beacon;
 
         ListAdapter(ArrayList<BlindBeacon> b){
             beacon_list = b;
@@ -71,7 +72,7 @@ public class DBActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            BlindBeacon beacon = beacon_list.get(position);
+            beacon = beacon_list.get(position);
             holder.title.setText(beacon.getName());
             holder.description.setText(beacon.getDescription());
         }
@@ -86,16 +87,21 @@ public class DBActivity extends AppCompatActivity {
         class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             TextView title;
             TextView description;
-
+            LinearLayout linearLayout;
             ViewHolder(View v) {
                 super(v);
                 title = (TextView) v.findViewById(R.id.title);
                 description = (TextView) v.findViewById(R.id.description);
+                linearLayout = (LinearLayout) v.findViewById(R.id.linear);
+                linearLayout.setOnClickListener(this);
             }
 
             @Override
             public void onClick(View v) {
-
+                int pos = getLayoutPosition();
+                Intent i = new Intent(DBActivity.this, BeaconDetailActivity.class);
+                i.putExtra(Data.PASS_BSSID, blindBeacons.get(pos).getUuid());
+                startActivity(i);
             }
         }
     }

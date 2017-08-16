@@ -22,18 +22,17 @@ public class RadarActivity extends AppCompatActivity {
 
     private static final String TAG = "BEACON_PROJECT";
     private ArrayList<BlindBeacon> beaconArrayList = new ArrayList<>();
-    private ViewPager viewPager;
-    private TabLayout tabLayout;
     private PagerAdapter pagerAdapter;
     private Vibrator v;
-    Timer timer;
+    private Timer timer;
+    private int last_size = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_radar);
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        viewPager = (ViewPager) findViewById(R.id.viewpager_radar);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager_radar);
         pagerAdapter = new FragmentAdaptor(getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager,true);
@@ -50,7 +49,6 @@ public class RadarActivity extends AppCompatActivity {
                     public void run() {
                        ScanBeacons scanBeacons = new ScanBeacons();
                        scanBeacons.execute();
-
                     }
                 });
             }
@@ -102,6 +100,11 @@ public class RadarActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Object o) {
             pagerAdapter.notifyDataSetChanged();
+            if (beaconArrayList.size() > last_size) {
+                v.vibrate(800);
+            }
+            last_size = beaconArrayList.size();
+
         }
     }
 }
