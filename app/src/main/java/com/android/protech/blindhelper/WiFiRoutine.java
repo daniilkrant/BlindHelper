@@ -53,7 +53,15 @@ class WiFiRoutine {
     }
 
     void disconnect(String ssid){
-        mWiseFy.disconnectFromCurrentNetwork();
         mWiseFy.removeNetwork(ssid);
+        mWiseFy.disconnectFromCurrentNetwork();
+    }
+
+    boolean isConnectedToWiFiNetwork(){
+        return mWiseFy.isDeviceConnectedToWifiNetwork();
+    }
+
+    boolean isConnectedToMobileNetwork(){
+        return mWiseFy.isDeviceConnectedToMobileNetwork();
     }
 }

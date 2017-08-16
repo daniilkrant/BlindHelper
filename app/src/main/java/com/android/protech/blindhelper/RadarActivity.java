@@ -26,6 +26,7 @@ public class RadarActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private PagerAdapter pagerAdapter;
     private Vibrator v;
+    Timer timer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +41,7 @@ public class RadarActivity extends AppCompatActivity {
         WiFiRoutine.getInstance().initWifi(getApplicationContext());
 
 
-        Timer timer = new Timer();
+        timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -65,6 +66,7 @@ public class RadarActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         beaconArrayList.clear();
+        timer.cancel();
     }
 
     private class FragmentAdaptor extends FragmentPagerAdapter {
@@ -91,7 +93,9 @@ public class RadarActivity extends AppCompatActivity {
 
         @Override
         protected Object doInBackground(Object[] params) {
-            beaconArrayList = ServerRoutine.getNearbyBeacons();
+            if (WiFiRoutine.getInstance().isConnectedToMobileNetwork() && !WiFiRoutine.getInstance().isConnectedToWiFiNetwork()) {
+                beaconArrayList = ServerRoutine.getNearbyBeacons();
+            }
             return null;
         }
 

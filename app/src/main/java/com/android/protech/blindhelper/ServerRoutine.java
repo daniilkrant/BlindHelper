@@ -16,6 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ServerRoutine {
 
     static ArrayList<BlindBeacon> getNearbyBeacons(){
+
         ArrayList<BlindBeacon> blindBeacons = new ArrayList<>();
         BlindBeacon temp_beacon;
         HashMap<String,String> BSSID_list = WiFiRoutine.getInstance().getPointsRegex();
@@ -52,5 +53,25 @@ public class ServerRoutine {
         return beacon.get(0);
     }
 
+    static ArrayList<BlindBeacon> getBeaconsFromDB(){
+        ArrayList<BlindBeacon> blindBeacons = new ArrayList<>();
 
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        Retrofit.Builder builder =
+                new Retrofit.Builder()
+                        .baseUrl(Data.API_BASE_URL)
+                        .addConverterFactory(GsonConverterFactory.create());
+        Retrofit retrofit = builder.client(httpClient.build()).build();
+        BlindAPI client = retrofit.create(BlindAPI.class);
+        Call<ArrayList<BlindBeacon>> call = client.getBeaconsList("all");
+        try {
+            Response<ArrayList<BlindBeacon>> response =  call.execute();
+            blindBeacons = response.body();
+        } catch (IOException e) {
+            blindBeacons = null;
+            e.printStackTrace();
+        }
+
+        return blindBeacons;
+    }
 }
