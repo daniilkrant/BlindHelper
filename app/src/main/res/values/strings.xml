@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name" translatable="false">Go to the sound | G2S</string>
+
+    <string name="title_activity_radar" translatable="false">RadarActivity</string>
+    <string name="beacon_call">Включить звук</string>
+    <string name="route_to_beacon">Проложить маршрут</string>
+    <string name="title_activity_main" translatable="false">Go to the sound</string>
+    <string name="title_home" translatable="false">Home</string>
+    <string name="title_dashboard" translatable="false">Dashboard</string>
+    <string name="title_notifications" translatable="false">Notifications</string>
+    <string name="access_coarse_location_rationale" translatable="false">To search for nearby network, we need to know about your location</string>
+    <string name="main_radar_enabled">Активна вкладка радар</string>
+    <string name="main_search_enabled">Активна вкладка поиск</string>
+    <string name="main_settings_enabled">Активна вкладка настройки</string>
+    <string name="main_fav_enabled">Активна вкладка избранное</string>
+    <string name="main_radar">Радар</string>
+    <string name="main_fav">Избранное</string>
+    <string name="main_search">Поиск</string>
+    <string name="main_settings">Настройки</string>
+    <string name="db_not_found">База не найдена</string>
+    <string name="btn_scan">Сканировать</string>
+    <string name="amount_beep">Количество звуковых сигналов</string>
+    <string name="detection_distance">Дистанция обнаружения</string>
+    <string name="vibro_on">Вибрация включена</string>
+    <string name="vibro_off">Вибрация Отключена</string>
+    <string name="sound_on">Озвучивание включено</string>
+    <string name="sound_off">Озвучивание выключено</string>
+    <string name="auto_sound_on">автоматическое озвучивание включено</string>
+    <string name="db_updated">База данных обновлена</string>
+    <string name="auto_sound_off">Автоматическое озвучивание выключено</string>
+    <string name="add_to_fav">Добавить в избранное</string>
+    <string name="added_to_fav">Элемент добавлен в избранное</string>
+    <string name="delete_from_fav">Удалить из избранного</string>
+    <string name="deleted_from_fav">Удалено из изранного</string>
+    <string name="sound">Озвучить</string>
+    <string name="found_new_beacon">Найдено новых маяков:</string>
+    <string name="btn_db_update">Обновить базу</string>
+    <string name="btn_choose_tts">Выбор синтезатора речи</string>
+    <string name="btn_feedback">Обратная связь</string>
+    <string name="hint_name_beacon">Название маяка</string>
+    <string name="beacon_find">Обнаружены маяки:</string>
+
+
+</resources>

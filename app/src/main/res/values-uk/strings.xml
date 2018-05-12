@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="beacon_call">Увімкнути звук</string>
+    <string name="btn_scan">Сканувати</string>
+    <string name="db_not_found">База данних не знайдена</string>
+    <string name="main_fav">Обране</string>
+    <string name="main_fav_enabled">Увімкнено обране</string>
+    <string name="main_radar">Радар</string>
+    <string name="main_radar_enabled">Увімкнено радар</string>
+    <string name="main_search">Пошук</string>
+    <string name="main_search_enabled">Увімкнено пошук</string>
+    <string name="main_settings">Налаштування</string>
+    <string name="main_settings_enabled">Увімкнені налаштування</string>
+    <string name="route_to_beacon">Прокласти маршрут</string>
+    <string name="amount_beep">Кількість звукових сигналів</string>
+    <string name="auto_sound_on">Автоматичне озвучування увімкнено</string>
+    <string name="db_updated">База даних оновлена</string>
+    <string name="detection_distance">Дистанція виявлення</string>
+    <string name="sound_off">Озвучування відключено</string>
+    <string name="sound_on">Озвучування увімкнено</string>
+    <string name="vibro_off">Вібрація увімкнена</string>
+    <string name="vibro_on">Вібрація відключена</string>
+    <string name="auto_sound_off">Автоматичне озвучування відлючено</string>
+    <string name="sound">Озвучити</string>
+    <string name="deleted_from_fav">Видалено із обранного</string>
+    <string name="delete_from_fav">Видалити з обранного</string>
+    <string name="added_to_fav">Додано до обранного</string>
+    <string name="add_to_fav">Додати до обранного</string>
+    <string name="found_new_beacon">"Знайдено нових маяків: "</string>
+    <string name="btn_db_update">Оновити базу</string>
+    <string name="btn_choose_tts">Вибір синтезатора мови</string>
+    <string name="btn_feedback">Зворотній зв\'язок</string>
+    <string name="hint_name_beacon">Назва маяка</string>
+    <string name="beacon_find">"Знайдено маяки: "</string>
+</resources>

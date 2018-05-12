@@ -1,0 +1,91 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".RadarFragment">
+
+    <WebView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:visibility="gone"
+        android:id="@+id/web-view">
+    </WebView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/beacon_title"
+        android:gravity="center"
+        android:layout_margin="8dp"
+        android:textSize="18sp"
+        android:layout_weight="0.7"
+        />
+
+    <TextView
+        android:id="@+id/beacon_location"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:layout_weight="0.5"
+
+        android:gravity="center"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/beacon_description"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:layout_margin="8dp"
+        android:layout_weight="0.5"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/beacon_time"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:layout_margin="8dp"
+        android:layout_weight="0.5"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/beacon_phone"
+        android:autoLink="phone"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:layout_margin="8dp"
+        android:layout_weight="0.5"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/btn_speak_to_user_beac"
+        android:text="@string/sound"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1"
+        android:enabled="false"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/add_to_fav"
+            android:id="@+id/btn_add_to_fav"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/btn_route_to_beac"
+            android:text="@string/route_to_beacon"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="beacon_call">Enable sound</string>
+    <string name="btn_scan">Scan</string>
+    <string name="db_not_found">Database not found</string>
+    <string name="main_fav">Favourite</string>
+    <string name="main_fav_enabled">Favourite section enabled</string>
+    <string name="main_radar_enabled">Radar section enabled</string>
+    <string name="main_search_enabled">Search section enabled</string>
+    <string name="main_settings_enabled">Settings section enabled</string>
+    <string name="route_to_beacon">Route to the point</string>
+    <string name="main_radar">Radar</string>
+    <string name="main_search">Search</string>
+    <string name="main_settings">Settings</string>
+    <string name="amount_beep">Amound of sound signals</string>
+    <string name="auto_sound_on">Automatic enabling of beacons activated</string>
+    <string name="db_updated">Database has been updated</string>
+    <string name="detection_distance">Detection distance</string>
+    <string name="sound_off">Notifications disabled</string>
+    <string name="sound_on">Notifications enabled</string>
+    <string name="vibro_off">Vibration disabled</string>
+    <string name="vibro_on">Vibration enabled</string>
+    <string name="auto_sound_off">Automatic enabling of beacons turned off</string>
+    <string name="add_to_fav">Add to favourites</string>
+    <string name="added_to_fav">Added to favourites</string>
+    <string name="delete_from_fav">Delete from favourites</string>
+    <string name="deleted_from_fav">Deleted from favourites</string>
+    <string name="sound">Sound</string>
+    <string name="found_new_beacon">"Found new beacons: "</string>
+    <string name="btn_db_update">Update DB</string>
+    <string name="btn_choose_tts">Choose TTS</string>
+    <string name="btn_feedback">Feedback</string>
+    <string name="hint_name_beacon">Beacon title</string>
+    <string name="beacon_find">Found beacons</string>
+</resources>
