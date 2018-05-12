@@ -74,19 +74,6 @@ public class RadarFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ScanBeacons scanBeacons = new ScanBeacons();
-                        scanBeacons.execute();
-                    }
-                });
-            }
-        },0,4000);
     }
 
     public static RadarFragment newInstance() {
@@ -110,48 +97,6 @@ public class RadarFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         timer.cancel();
-    }
-
-    private class ScanBeacons extends AsyncTask{
-
-        @Override
-        protected Object doInBackground(Object[] params) {
-            if ( Data.getNearbyBeacons() != null) {
-                beaconArrayList.clear();
-                beaconArrayList.addAll(Data.getNearbyBeacons());
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object o) {
-            if (beaconArrayList != null) {
-                itemsAdapter.notifyDataSetChanged();
-                if (beaconArrayList.size() > last_size) {
-                    if (sharedPreferences.getBoolean((Data.IS_VIBRO), true)) {
-                        v.vibrate(1500);
-                        listView.announceForAccessibility(getString(R.string.found_new_beacon) + Integer.toString(beaconArrayList.size() - last_size));
-                        if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-                            TTS.getInstance().speakWords(getString(R.string.found_new_beacon) + Integer.toString(beaconArrayList.size() - last_size));
-                        }
-                    }
-                }
-
-                if (beaconArrayList.size() != last_size) {
-                    if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-                        String message = getString(R.string.beacon_find);
-                        TTS.getInstance().speakWords(message);
-                        for (int i = 0; i < beaconArrayList.size(); i++) {
-                            TTS.getInstance().speakWords(beaconArrayList.get(i).getName());
-                            TTS.getInstance().silence();
-                        }
-                    }
-                }
-
-                last_size = beaconArrayList.size();
-                itemsAdapter.notifyDataSetChanged();
-            }
-        }
     }
 
     public interface RecyclerViewClickListener {

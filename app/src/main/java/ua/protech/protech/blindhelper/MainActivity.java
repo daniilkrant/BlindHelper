@@ -21,6 +21,8 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import sm.euzee.github.com.servicemanager.ServiceManager;
+
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.LOCATION_HARDWARE;
 
@@ -29,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     private PermissionUtil permissionUtil;
     private ViewPager pager;
     private SharedPreferences sharedPreferences;
-    private PowerManager.WakeLock wl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,19 +38,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         sharedPreferences = getSharedPreferences(Data.SETTINGS_FILE_SHARED_PREF, Context.MODE_PRIVATE);
-
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "My Tag");
-        wl.acquire(10);
-
-        WiFiRoutine.getInstance().initWifi(getApplicationContext());
-        String tts_engine = sharedPreferences.getString(Data.TTS_ENGINE, "empty");
-
-        if (!tts_engine.equals("empty"))
-            TTS.getInstance().initTTS(getApplicationContext(), tts_engine);
-        else
-            TTS.getInstance().initTTS(getApplicationContext());
-
 
         try {
             Thread.sleep(1500);
@@ -157,9 +145,9 @@ public class MainActivity extends AppCompatActivity {
         permissionUtil = PermissionUtil.getInstance();
         checkForPermissions();
 
-        Intent scanningServiceIntent = new Intent(this, ScaningService.class);
-        startService(scanningServiceIntent);
-
+//        Intent scanningServiceIntent = new Intent(this, ScaningService.class);
+//        startService(scanningServiceIntent);
+        ServiceManager.runService(getApplicationContext(), ScaningService.class);
     }
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
@@ -245,7 +233,5 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (wl.isHeld())
-            wl.release();
     }
 }

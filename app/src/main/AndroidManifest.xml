@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ua.protech.protech.blindhelper">
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -11,11 +12,11 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        tools:replace="android:allowBackup"
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
@@ -33,10 +34,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RadarActivity"
-            android:label="@string/title_activity_radar"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".BeaconDetailActivity" />
+            android:name=".BeaconDetailActivity"
+            android:screenOrientation="portrait"
+        />
 
         <service
             android:name=".ScaningService"
