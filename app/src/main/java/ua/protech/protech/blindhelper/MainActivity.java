@@ -68,53 +68,53 @@ public class MainActivity extends AppCompatActivity {
         pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
         pager.setOffscreenPageLimit(0);
 
-//        radar.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords("Кнопка выбора вкладки радар");
-//                }
-//                return false;
-//            }
-//        });
+        radar.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Кнопка выбора вкладки радар");
+                }
+                return false;
+            }
+        });
 
-//        fav.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords("Кнопка выбора вкладки избранное");
-//                }
-//                return false;
-//            }
-//        });
+        fav.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Кнопка выбора вкладки избранное");
+                }
+                return false;
+            }
+        });
 
-//        search.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords("Кнопка выбора вкладки поиск");
-//                }
-//                return false;
-//            }
-//        });
+        search.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Кнопка выбора вкладки поиск");
+                }
+                return false;
+            }
+        });
 
-//        settings.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords("Кнопка выбора кладки настройки");
-//                }
-//                return false;
-//            }
-//        });
+        settings.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Кнопка выбора кладки настройки");
+                }
+                return false;
+            }
+        });
 
         radar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 pager.setCurrentItem(0);
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords(getString(R.string.main_radar_enabled));
-//                }
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords(getString(R.string.main_radar_enabled));
+                }
                 search.announceForAccessibility(getString(R.string.main_radar_enabled));
             }
         });
@@ -122,9 +122,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 pager.setCurrentItem(1);
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords(getString(R.string.main_fav_enabled));
-//                }
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords(getString(R.string.main_fav_enabled));
+                }
                 settings.announceForAccessibility(getString(R.string.main_fav_enabled));
             }
         });
@@ -132,9 +132,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 pager.setCurrentItem(2);
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords(getString(R.string.main_search_enabled));
-//                }
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords(getString(R.string.main_search_enabled));
+                }
                 search.announceForAccessibility(getString(R.string.main_search_enabled));
             }
         });
@@ -142,9 +142,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 pager.setCurrentItem(3);
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords(getString(R.string.main_settings_enabled));
-//                }
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords(getString(R.string.main_settings_enabled));
+                }
                 radar.announceForAccessibility(getString(R.string.main_settings_enabled));
             }
         });

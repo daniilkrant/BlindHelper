@@ -19,6 +19,7 @@ public class Data {
     static final String NUMBER_OF_CYCLES_POSITION = "NUMBER_OF_CYCLES_POSITION";
     static final String NUMBER_OF_SIGNALS = "number_of_signals";
     static final String NUMBER_OF_CYCLES = "NUMBER_OF_CYCLES";
+    static final String DEMO_SOUND = "DEMO_SOUND";
     static final String SETTINGS_FILE_SHARED_PREF = "settings";
     static final String TTS_ENGINE = "tts_engine";
     static final String IS_VIBRO = "is_vibro";

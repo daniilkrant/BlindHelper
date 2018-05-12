@@ -56,88 +56,88 @@ public class BeaconDetailActivity extends AppCompatActivity {
 
         WiFiRoutine.getInstance().initWifi(getApplicationContext());
 
-//        beacon_description.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords("Описание:" + beacon_description.getText());
-//                }
-//                return false;
-//            }
-//        });
+        beacon_description.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Описание:" + beacon_description.getText());
+                }
+                return false;
+            }
+        });
 
-//        beacon_title.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords("Название:" + beacon_title.getText());
-//                }
-//                return false;
-//            }
-//        });
+        beacon_title.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Название:" + beacon_title.getText());
+                }
+                return false;
+            }
+        });
 
-//        beacon_location.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords("Расположение:" + beacon_location.getText());
-//                }
-//                return false;
-//            }
-//        });
+        beacon_location.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Расположение:" + beacon_location.getText());
+                }
+                return false;
+            }
+        });
 
-//        beacon_time.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords("Время работы:" + beacon_time.getText());
-//                }
-//                return false;
-//            }
-//        });
-//
-//        beacon_phone.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords("Номер телефона:" + beacon_phone.getText());
-//                }
-//                return false;
-//            }
-//        });
+        beacon_time.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Время работы:" + beacon_time.getText());
+                }
+                return false;
+            }
+        });
 
-//        btn_add_to_fav.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    if (!btn_add_to_fav.getText().equals(getString(R.string.delete_from_fav)))
-//                        TTS.getInstance().speakWords("Кнопка добавления маяка в избранное");
-//                    else
-//                        TTS.getInstance().speakWords("Кнопка удаления маяка из избранного");
-//                }
-//                return false;
-//            }
-//        });
-//
-//        btn_activate_sound.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords("Кнопка озвучивания маяка");
-//                }
-//                return false;
-//            }
-//        });
-//
-//        beacon_route.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords("Кнопка вызова навигационного приложения");
-//                }
-//                return false;
-//            }
-//        });
+        beacon_phone.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Номер телефона:" + beacon_phone.getText());
+                }
+                return false;
+            }
+        });
+
+        btn_add_to_fav.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    if (!btn_add_to_fav.getText().equals(getString(R.string.delete_from_fav)))
+                        TTS.getInstance().speakWords("Кнопка добавления маяка в избранное");
+                    else
+                        TTS.getInstance().speakWords("Кнопка удаления маяка из избранного");
+                }
+                return false;
+            }
+        });
+
+        btn_activate_sound.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Кнопка озвучивания маяка");
+                }
+                return false;
+            }
+        });
+
+        beacon_route.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Кнопка вызова навигационного приложения");
+                }
+                return false;
+            }
+        });
 
         btn_add_to_fav.setOnClickListener(new View.OnClickListener() {
             @Override

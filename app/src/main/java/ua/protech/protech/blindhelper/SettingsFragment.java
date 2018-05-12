@@ -28,11 +28,12 @@ import java.util.List;
 
 public class SettingsFragment extends Fragment {
 
-    private Button vibro_btn, sound_btn, db_btn, auto_sound_btn, feedback, sound_engine_btn;
+    private Button vibro_btn, sound_btn, db_btn, auto_sound_btn, feedback, sound_engine_btn, demo_sound_btn;
     private Spinner signal_counter, cycle_counter;
     private Boolean vibro = true;
     private Boolean sound = true;
-    private Boolean auto_sound = true;
+    private Boolean auto_sound = false;
+    private Boolean demo_sound = true;
     private SharedPreferences sharedPreferences;
     private ArrayList<BlindBeacon> blindBeacons;
 
@@ -55,6 +56,7 @@ public class SettingsFragment extends Fragment {
         db_btn = (Button) view.findViewById(R.id.db_btn);
         feedback = (Button) view.findViewById(R.id.feedback);
         sound_engine_btn = (Button) view.findViewById(R.id.sound_engine_btn);
+        demo_sound_btn = (Button) view.findViewById(R.id.demo_sound_btn);
         signal_counter = (Spinner) view.findViewById(R.id.signal_counter);
         cycle_counter = (Spinner) view.findViewById(R.id.cycle_counter);
 
@@ -117,17 +119,50 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        sound_engine_btn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Выбора синтезатора речи");
+                }
+                return false;
+            }
+        });
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(Data.DEMO_SOUND, demo_sound);
+        editor.apply();
+        demo_sound_btn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Кнопка программное озвучивание интерфейса");
+                }
+                return false;
+            }
+        });
 
 
-//        feedback.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords("Кнопка отправки информации разработчикам");
-//                }
-//                return false;
-//            }
-//        });
+        demo_sound_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                demo_sound = !demo_sound;
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(Data.DEMO_SOUND, demo_sound);
+                editor.apply();
+            }
+        });
+
+
+        feedback.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Кнопка отправки информации разработчикам");
+                }
+                return false;
+            }
+        });
 
         feedback.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,15 +192,15 @@ public class SettingsFragment extends Fragment {
             auto_sound_btn.setText(getString(R.string.auto_sound_off));
         }
 
-//        signal_counter.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords("Выбор количества сигналов");
-//                }
-//                return false;
-//            }
-//        });
+        signal_counter.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Выбор количества сигналов");
+                }
+                return false;
+            }
+        });
 
         signal_counter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -182,15 +217,15 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-//        distance_counter.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords("Выбор дистанции обнаружения");
-//                }
-//                return false;
-//            }
-//        });
+        cycle_counter.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Выбор количества циклов воспроизведения");
+                }
+                return false;
+            }
+        });
 
         cycle_counter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -207,15 +242,15 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-//        db_btn.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords("Кнопка обновления базы данных");
-//                }
-//                return false;
-//            }
-//        });
+        db_btn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Кнопка обновления базы данных");
+                }
+                return false;
+            }
+        });
 
         db_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -225,15 +260,15 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-//        vibro_btn.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords("Кнопка " + ((TextView) view).getText());
-//                }
-//                return false;
-//            }
-//        });
+        vibro_btn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Кнопка " + ((TextView) view).getText());
+                }
+                return false;
+            }
+        });
 
         vibro_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -253,15 +288,15 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-//        sound_btn.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords("Кнопка " + ((TextView) view).getText());
-//                }
-//                return false;
-//            }
-//        });
+        sound_btn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Кнопка " + ((TextView) view).getText());
+                }
+                return false;
+            }
+        });
 
         sound_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -281,16 +316,18 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-//        auto_sound_btn.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords("Кнопка " + ((TextView) view).getText());
-//                }
-//                return false;
-//            }
-//        });
+        auto_sound_btn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Кнопка " + ((TextView) view).getText());
+                }
+                return false;
+            }
+        });
 
+        editor.putBoolean(Data.IS_AUTO_AUDIO, auto_sound);
+        editor.apply();
         auto_sound_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

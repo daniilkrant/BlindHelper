@@ -36,6 +36,12 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:id="@+id/demo_sound_btn"
+            android:text="Программное озвучивание интерфейса"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:id="@+id/sound_engine_btn"
             android:text="@string/btn_choose_tts"/>
         <Spinner

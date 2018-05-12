@@ -61,9 +61,9 @@ public class RadarFragment extends Fragment {
 
             @Override
             public void onLongClick(View view, int pos) {
-//                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-//                    TTS.getInstance().speakWords("Маяк: " + beaconArrayList.get(pos).getName());
-//                }
+                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
+                    TTS.getInstance().speakWords("Маяк: " + beaconArrayList.get(pos).getName());
+                }
             }
         }));
         sharedPreferences = getActivity().getSharedPreferences(Data.SETTINGS_FILE_SHARED_PREF, Context.MODE_PRIVATE);
@@ -136,7 +136,6 @@ public class RadarFragment extends Fragment {
                         }
                     }
                 }
-                    Log.e("@@@", "" + beaconArrayList.size());
 
                 if (beaconArrayList.size() != last_size) {
                     if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
@@ -145,9 +144,7 @@ public class RadarFragment extends Fragment {
                         for (int i = 0; i < beaconArrayList.size(); i++) {
                             TTS.getInstance().speakWords(beaconArrayList.get(i).getName());
                             TTS.getInstance().silence();
-//                            message += beaconArrayList.get(i).getName();
                         }
-//                        TTS.getInstance().speakWords(message);
                     }
                 }
 
@@ -163,8 +160,7 @@ public class RadarFragment extends Fragment {
         void onLongClick(View view, int position);
         void onClick(View view, int position);
     }
-
-
+    
     public class RecyclerViewTouchListener implements RecyclerView.OnItemTouchListener{
 
         private GestureDetector gestureDetector;
