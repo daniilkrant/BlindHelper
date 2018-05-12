@@ -150,8 +150,6 @@ public class RadarFragment extends Fragment {
 
                 last_size = beaconArrayList.size();
                 itemsAdapter.notifyDataSetChanged();
-
-
             }
         }
     }
@@ -160,7 +158,7 @@ public class RadarFragment extends Fragment {
         void onLongClick(View view, int position);
         void onClick(View view, int position);
     }
-    
+
     public class RecyclerViewTouchListener implements RecyclerView.OnItemTouchListener{
 
         private GestureDetector gestureDetector;

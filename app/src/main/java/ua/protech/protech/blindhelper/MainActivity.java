@@ -3,6 +3,7 @@ package ua.protech.protech.blindhelper;
 import android.app.KeyguardManager;
 import android.app.SharedElementCallback;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.PowerManager;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         sharedPreferences = getSharedPreferences(Data.SETTINGS_FILE_SHARED_PREF, Context.MODE_PRIVATE);
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -154,6 +156,10 @@ public class MainActivity extends AppCompatActivity {
         kl.disableKeyguard();
         permissionUtil = PermissionUtil.getInstance();
         checkForPermissions();
+
+        Intent scanningServiceIntent = new Intent(this, ScaningService.class);
+        startService(scanningServiceIntent);
+
     }
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
@@ -239,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        wl.release();
+        if (wl.isHeld())
+            wl.release();
     }
 }
