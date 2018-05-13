@@ -5,10 +5,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.wifi.aware.PublishDiscoverySession;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,6 +20,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 
 import sm.euzee.github.com.servicemanager.ServiceManager;
@@ -25,18 +31,26 @@ import sm.euzee.github.com.servicemanager.ServiceManager;
 public class RadarFragment extends Fragment {
 
     private RecyclerView listView;
-    private static RadarFragment.ListAdapter itemsAdapter;
+    private RadarFragment.ListAdapter itemsAdapter;
     private SharedPreferences sharedPreferences;
+    private ArrayList<BlindBeacon> beaconsToShow;
 
     public RadarFragment() {
 
     }
 
     @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_radar, container, false);
-        itemsAdapter = new ListAdapter(Data.getBeaconsAfterScan());
+        beaconsToShow = Data.getBeaconsAfterScan();
+        itemsAdapter = new ListAdapter(beaconsToShow);
         listView = (RecyclerView) view.findViewById(R.id.list);
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
         listView.setAdapter(itemsAdapter);
@@ -61,10 +75,14 @@ public class RadarFragment extends Fragment {
         }));
         sharedPreferences = getActivity().getSharedPreferences(Data.SETTINGS_FILE_SHARED_PREF, Context.MODE_PRIVATE);
 
-        Intent intent = new Intent(getActivity().getApplicationContext(), ScaningService.class);
-        ServiceManager.runService(getActivity().getApplicationContext(), intent);
+        EventBus.getDefault().register(this);
 
         return view;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(ServiceMessages event) {
+
     }
 
     public static RadarFragment newInstance() {

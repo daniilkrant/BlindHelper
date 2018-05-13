@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-
         fav.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -77,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-
         search.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -87,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-
         settings.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -97,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-
         radar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,11 +135,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        KeyguardManager km = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
-        KeyguardManager.KeyguardLock kl = km.newKeyguardLock("BlindHelper");
-        kl.disableKeyguard();
         permissionUtil = PermissionUtil.getInstance();
         checkForPermissions();
+
+        Intent intent = new Intent(getApplicationContext(), ScaningService.class);
+        ServiceManager.runService(getApplicationContext(), intent);
+
     }
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
@@ -156,24 +153,19 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int pos) {
             switch(pos) {
                 case 0: {
-//                    pager.announceForAccessibility(getString(R.string.main_radar_enabled));
                     return RadarFragment.newInstance();
                 }
                 case 1: {
-//                    pager.announceForAccessibility(getString(R.string.main_fav_enabled));
                     return FavouriteFragment.newInstance();
                 }
                 case 2: {
-//                    pager.announceForAccessibility(getString(R.string.main_search_enabled));
                     return DBFragment.newInstance();
 
                 }
                 case 3: {
-//                    pager.announceForAccessibility(getString(R.string.main_settings_enabled));
                     return SettingsFragment.newInstance();
                 }
                 default: {
-//                    pager.announceForAccessibility(getString(R.string.main_radar_enabled));
                     return RadarFragment.newInstance();
                 }
             }

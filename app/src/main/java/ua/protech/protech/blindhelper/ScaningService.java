@@ -14,6 +14,8 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -95,6 +97,9 @@ public class ScaningService extends Service {
 
     private void checkForNewBeacons() {
         int current_size = beaconArrayList.size();
+        if (current_size != last_size)
+            EventBus.getDefault().post(new ServiceMessages("Update"));
+
         if (current_size > last_size) {
             if (sharedPreferences.getBoolean((Data.IS_VIBRO), true)) {
                 v.vibrate(1500);
