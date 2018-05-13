@@ -31,6 +31,19 @@ public class Data {
     static final String[] cycles_list = {"1","3","5","7","10","15"};
     static final String[] sound_counter_list= {"1","2","3","4","5","6","10","15","20"};
 
+    private static ArrayList<BlindBeacon> beaconsAfterScan;
+
+    public static ArrayList<BlindBeacon> getBeaconsAfterScan() {
+        if (beaconsAfterScan == null) {
+            return new ArrayList<BlindBeacon>();
+        }
+        return beaconsAfterScan;
+    }
+
+    public static void setBeaconsAfterScan(ArrayList<BlindBeacon> beaconsAfterScan) {
+        Data.beaconsAfterScan = beaconsAfterScan;
+    }
+
     //Serialization
 
     private static ArrayList<BlindBeacon> serialized_beacons;
@@ -58,24 +71,6 @@ public class Data {
         }
         return new BlindBeacon(false); //ideally unreachable, return mock
     }
-
-    public static ArrayList<BlindBeacon> getNearbyBeacons(){
-        ArrayList<BlindBeacon> blindBeacons = new ArrayList<>();
-        BlindBeacon temp_beacon;
-        HashMap<String,String> BSSID_list = WiFiRoutine.getInstance().getPointsRegex();
-
-        if (BSSID_list != null) {
-
-            for (Map.Entry<String, String> entry : BSSID_list.entrySet()) {
-                temp_beacon = Data.getBeaconInfo(entry.getKey());
-                temp_beacon.setSsid(entry.getValue());
-                blindBeacons.add(temp_beacon);
-            }
-        }
-
-        return blindBeacons;
-    }
-
 
     //Serialization
 

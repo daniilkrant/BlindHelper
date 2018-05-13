@@ -144,10 +144,6 @@ public class MainActivity extends AppCompatActivity {
         kl.disableKeyguard();
         permissionUtil = PermissionUtil.getInstance();
         checkForPermissions();
-
-//        Intent scanningServiceIntent = new Intent(this, ScaningService.class);
-//        startService(scanningServiceIntent);
-        ServiceManager.runService(getApplicationContext(), ScaningService.class);
     }
 
     private class MyPagerAdapter extends FragmentPagerAdapter {

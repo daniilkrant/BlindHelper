@@ -1,17 +1,22 @@
 package ua.protech.protech.blindhelper;
 
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,12 +29,13 @@ public class ScaningService extends Service {
     private SharedPreferences sharedPreferences;
     private Runnable scanningThread;
 
+    private PendingIntent pendingIntent;
+
     public ScaningService() {
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i("@@@", "Service: onStartCommand");
         return START_STICKY;
     }
 
@@ -45,8 +51,6 @@ public class ScaningService extends Service {
         else
             TTS.getInstance().initTTS(getApplicationContext());
 
-
-
         Notification.Builder builder = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.icon)
                 .setContentTitle("Система маяковой навигации G2s")
@@ -57,7 +61,7 @@ public class ScaningService extends Service {
         scanningThread  = new Runnable() {
             @Override
             public void run() {
-                scanForBeacons();
+                getNearbyBeacons();
                 checkForNewBeacons();
             }
         };
@@ -72,13 +76,21 @@ public class ScaningService extends Service {
 
     }
 
-    private void scanForBeacons() {
-        ArrayList<BlindBeacon> ret = Data.getNearbyBeacons();
-        if (ret != null) {
+    public void getNearbyBeacons(){
+        BlindBeacon temp_beacon;
+        HashMap<String,String> BSSID_list = WiFiRoutine.getInstance().getPointsRegex();
+
+        if (BSSID_list != null) {
             beaconArrayList.clear();
-            beaconArrayList.addAll(ret);
-            Log.e("@@@", "" + beaconArrayList.size());
+            for (Map.Entry<String, String> entry : BSSID_list.entrySet()) {
+                temp_beacon = Data.getBeaconInfo(entry.getKey());
+                temp_beacon.setSsid(entry.getValue());
+                beaconArrayList.add(temp_beacon);
+            }
         }
+
+        Data.setBeaconsAfterScan(beaconArrayList);
+
     }
 
     private void checkForNewBeacons() {
@@ -86,9 +98,9 @@ public class ScaningService extends Service {
         if (current_size > last_size) {
             if (sharedPreferences.getBoolean((Data.IS_VIBRO), true)) {
                 v.vibrate(1500);
-                if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-                    TTS.getInstance().speakWords(getString(R.string.found_new_beacon) + Integer.toString(beaconArrayList.size() - last_size));
-                }
+            }
+            if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
+                TTS.getInstance().speakWords(getString(R.string.found_new_beacon) + Integer.toString(beaconArrayList.size() - last_size));
             }
         }
 

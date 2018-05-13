@@ -1,17 +1,14 @@
 package ua.protech.protech.blindhelper;
 
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -19,19 +16,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+
+import sm.euzee.github.com.servicemanager.ServiceManager;
 
 public class RadarFragment extends Fragment {
 
-    private ArrayList<BlindBeacon> beaconArrayList = new ArrayList<>();
-    private Vibrator v;
-    private Timer timer;
-    private int last_size = 0;
     private RecyclerView listView;
-    private RadarFragment.ListAdapter itemsAdapter;
+    private static RadarFragment.ListAdapter itemsAdapter;
     private SharedPreferences sharedPreferences;
 
     public RadarFragment() {
@@ -42,8 +36,7 @@ public class RadarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_radar, container, false);
-        v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
-        itemsAdapter = new ListAdapter(beaconArrayList);
+        itemsAdapter = new ListAdapter(Data.getBeaconsAfterScan());
         listView = (RecyclerView) view.findViewById(R.id.list);
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
         listView.setAdapter(itemsAdapter);
@@ -53,8 +46,8 @@ public class RadarFragment extends Fragment {
             @Override
             public void onClick(View view, int pos) {
                 Intent i = new Intent(getContext(), BeaconDetailActivity.class);
-                i.putExtra(Data.PASS_MAC, beaconArrayList.get(pos).getUuid());
-                i.putExtra(Data.PASS_SSID, beaconArrayList.get(pos).getSsid());
+                i.putExtra(Data.PASS_MAC, Data.getBeaconsAfterScan().get(pos).getUuid());
+                i.putExtra(Data.PASS_SSID, Data.getBeaconsAfterScan().get(pos).getSsid());
                 i.putExtra(Data.IS_WENT_FROM_RADAR, true);
                 startActivity(i);
             }
@@ -62,41 +55,21 @@ public class RadarFragment extends Fragment {
             @Override
             public void onLongClick(View view, int pos) {
                 if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
-                    TTS.getInstance().speakWords("Маяк: " + beaconArrayList.get(pos).getName());
+                    TTS.getInstance().speakWords("Маяк: " + Data.getBeaconsAfterScan().get(pos).getName());
                 }
             }
         }));
         sharedPreferences = getActivity().getSharedPreferences(Data.SETTINGS_FILE_SHARED_PREF, Context.MODE_PRIVATE);
-        timer = new Timer();
-        return view;
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+        Intent intent = new Intent(getActivity().getApplicationContext(), ScaningService.class);
+        ServiceManager.runService(getActivity().getApplicationContext(), intent);
+
+        return view;
     }
 
     public static RadarFragment newInstance() {
         RadarFragment f = new RadarFragment();
         return f;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        timer.cancel();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        timer.cancel();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        timer.cancel();
     }
 
     public interface RecyclerViewClickListener {
@@ -109,7 +82,7 @@ public class RadarFragment extends Fragment {
         private GestureDetector gestureDetector;
         private RecyclerViewClickListener clickListener;
 
-        public RecyclerViewTouchListener(Context context, final RecyclerView recyclerView, final RecyclerViewClickListener clickListener) {
+        RecyclerViewTouchListener(Context context, final RecyclerView recyclerView, final RecyclerViewClickListener clickListener) {
             this.clickListener = clickListener;
             gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
                 @Override
