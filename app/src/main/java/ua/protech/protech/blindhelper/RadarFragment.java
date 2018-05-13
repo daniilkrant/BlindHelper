@@ -33,7 +33,7 @@ public class RadarFragment extends Fragment {
     private RecyclerView listView;
     private RadarFragment.ListAdapter itemsAdapter;
     private SharedPreferences sharedPreferences;
-    private ArrayList<BlindBeacon> beaconsToShow;
+    private ArrayList<BlindBeacon> beaconsToShow = new ArrayList<>();
 
     public RadarFragment() {
 
@@ -49,7 +49,7 @@ public class RadarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_radar, container, false);
-        beaconsToShow = Data.getBeaconsAfterScan();
+        beaconsToShow.addAll(Data.getBeaconsAfterScan());
         itemsAdapter = new ListAdapter(beaconsToShow);
         listView = (RecyclerView) view.findViewById(R.id.list);
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -80,9 +80,24 @@ public class RadarFragment extends Fragment {
         return view;
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(ServiceMessages event) {
+    @Override
+    public void onResume() {
+        ServiceMessages stickyEvent = EventBus.getDefault().getStickyEvent(ServiceMessages.class);
+        // Better check that an event was actually posted before
+        if(stickyEvent != null) {
+            EventBus.getDefault().removeStickyEvent(stickyEvent);
+            beaconsToShow.clear();
+            beaconsToShow.addAll(Data.getBeaconsAfterScan());
+            itemsAdapter.notifyDataSetChanged();
+        }
+        super.onResume();
+    }
 
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(ServiceMessages event) {
+        beaconsToShow.clear();
+        beaconsToShow.addAll(Data.getBeaconsAfterScan());
+        itemsAdapter.notifyDataSetChanged();
     }
 
     public static RadarFragment newInstance() {

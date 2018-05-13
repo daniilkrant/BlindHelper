@@ -98,7 +98,7 @@ public class ScaningService extends Service {
     private void checkForNewBeacons() {
         int current_size = beaconArrayList.size();
         if (current_size != last_size)
-            EventBus.getDefault().post(new ServiceMessages("Update"));
+            EventBus.getDefault().postSticky(new ServiceMessages("Update"));
 
         if (current_size > last_size) {
             if (sharedPreferences.getBoolean((Data.IS_VIBRO), true)) {
