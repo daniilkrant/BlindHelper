@@ -1,4 +1,4 @@
-package ua.protech.protech.blindhelper;
+package ua.protech.protech.g2s;
 
 
 import android.content.Context;
@@ -43,8 +43,8 @@ class TTS implements TextToSpeech.OnInitListener {
     }
 
     public List<TextToSpeech.EngineInfo> getListOfTTS(){
-        List<TextToSpeech.EngineInfo> ttss = myTTS.getEngines();
-        return ttss;
+        List<TextToSpeech.EngineInfo> tts = myTTS.getEngines();
+        return tts;
     }
 
     @Override

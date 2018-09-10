@@ -1,4 +1,4 @@
-package ua.protech.protech.blindhelper;
+package ua.protech.protech.g2s;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -28,7 +28,7 @@ import java.util.List;
 
 public class SettingsFragment extends Fragment {
 
-    private Button vibro_btn, sound_btn, db_btn, auto_sound_btn, feedback, sound_engine_btn, demo_sound_btn;
+    private Button vibro_btn, db_btn, auto_sound_btn, feedback, sound_engine_btn, demo_sound_btn;
     private Spinner signal_counter, cycle_counter;
     private Boolean vibro = true;
     private Boolean sound = true;
@@ -51,7 +51,6 @@ public class SettingsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         sharedPreferences = getActivity().getSharedPreferences(Data.SETTINGS_FILE_SHARED_PREF, Context.MODE_PRIVATE);
         vibro_btn = (Button) view.findViewById(R.id.vibro_btn);
-        sound_btn = (Button) view.findViewById(R.id.sound_btn);
         auto_sound_btn = (Button) view.findViewById(R.id.sound_auto_btn);
         db_btn = (Button) view.findViewById(R.id.db_btn);
         feedback = (Button) view.findViewById(R.id.feedback);
@@ -150,6 +149,11 @@ public class SettingsFragment extends Fragment {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean(Data.DEMO_SOUND, demo_sound);
                 editor.apply();
+                if (!demo_sound) {
+                    demo_sound_btn.setText("Программное озвучивание интерфейса отключено");
+                } else {
+                    demo_sound_btn.setText("Программное озвучивание интерфейса включено");
+                }
             }
         });
 
@@ -175,14 +179,6 @@ public class SettingsFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
-        if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)){
-            sound = true;
-            sound_btn.setText(getString(R.string.sound_on));
-        } else {
-            sound = false;
-            sound_btn.setText(getString(R.string.sound_off));
-        }
 
         if (sharedPreferences.getBoolean((Data.IS_AUTO_AUDIO), false)){
             auto_sound = true;
@@ -284,34 +280,6 @@ public class SettingsFragment extends Fragment {
                 else {
                     vibro_btn.setText(getString(R.string.vibro_off));
                     vibro_btn.announceForAccessibility(getString(R.string.vibro_off));
-                }
-            }
-        });
-
-        sound_btn.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
-                    TTS.getInstance().speakWords("Кнопка " + ((TextView) view).getText());
-                }
-                return false;
-            }
-        });
-
-        sound_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sound = !sound;
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(Data.IS_AUDIO, sound);
-                editor.apply();
-                if (sound) {
-                    sound_btn.setText(getString(R.string.sound_on));
-                    sound_btn.announceForAccessibility(getString(R.string.sound_on));
-                }
-                else {
-                    sound_btn.setText(getString(R.string.sound_off));
-                    sound_btn.announceForAccessibility(getString(R.string.sound_off));
                 }
             }
         });

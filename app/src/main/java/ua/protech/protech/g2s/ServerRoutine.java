@@ -1,4 +1,4 @@
-package ua.protech.protech.blindhelper;
+package ua.protech.protech.g2s;
 
 import android.util.Log;
 

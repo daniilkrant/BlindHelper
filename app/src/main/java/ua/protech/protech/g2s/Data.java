@@ -1,4 +1,4 @@
-package ua.protech.protech.blindhelper;
+package ua.protech.protech.g2s;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -28,8 +28,8 @@ public class Data {
     static final String IS_WENT_FROM_RADAR = "went_from_radar";
     static final String TAG = "BLINDHELPER";
     static final String BEACONS_FILE_NAME = "BLINDHELPER";
-    static final String[] cycles_list = {"1","3","5","7","10","15"};
-    static final String[] sound_counter_list= {"1","2","3","4","5","6","10","15","20"};
+    static final String[] cycles_list = {"1","2","3","5","10","15"};
+    static final String[] sound_counter_list= {"1","2","3","4","5","7","10","15","20"};
 
     private static ArrayList<BlindBeacon> beaconsAfterScan;
 
@@ -65,9 +65,11 @@ public class Data {
 
     @NonNull
     public static BlindBeacon getBeaconInfo(String mac){
-        for (BlindBeacon b: serialized_beacons){
-            if (b.getUuid().equals(mac))
-            return b;
+        if (serialized_beacons != null) {
+            for (BlindBeacon b : serialized_beacons) {
+                if (b.getUuid().equals(mac))
+                    return b;
+            }
         }
         return new BlindBeacon(false); //ideally unreachable, return mock
     }

@@ -1,4 +1,4 @@
-package ua.protech.protech.blindhelper;
+package ua.protech.protech.g2s;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -64,7 +64,7 @@ public class ScaningService extends Service {
             @Override
             public void run() {
                 getNearbyBeacons();
-                checkForNewBeacons();
+                Log.e("@@@@", "size: " + Integer.toString(beaconArrayList.size()));
             }
         };
 
@@ -79,6 +79,7 @@ public class ScaningService extends Service {
     }
 
     public void getNearbyBeacons(){
+        beaconArrayList.clear();
         BlindBeacon temp_beacon;
         HashMap<String,String> BSSID_list = WiFiRoutine.getInstance().getPointsRegex();
 
@@ -92,7 +93,7 @@ public class ScaningService extends Service {
         }
 
         Data.setBeaconsAfterScan(beaconArrayList);
-
+        checkForNewBeacons();
     }
 
     private void checkForNewBeacons() {

@@ -1,11 +1,9 @@
-package ua.protech.protech.blindhelper;
+package ua.protech.protech.g2s;
 
 
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.wifi.aware.PublishDiscoverySession;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,15 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-
-import sm.euzee.github.com.servicemanager.ServiceManager;
 
 public class RadarFragment extends Fragment {
 
@@ -73,6 +68,7 @@ public class RadarFragment extends Fragment {
                 }
             }
         }));
+
         sharedPreferences = getActivity().getSharedPreferences(Data.SETTINGS_FILE_SHARED_PREF, Context.MODE_PRIVATE);
 
         EventBus.getDefault().register(this);
@@ -83,10 +79,19 @@ public class RadarFragment extends Fragment {
     @Override
     public void onResume() {
         ServiceMessages stickyEvent = EventBus.getDefault().getStickyEvent(ServiceMessages.class);
-        // Better check that an event was actually posted before
+        if (beaconsToShow != null && itemsAdapter != null)
+        {
+            beaconsToShow.clear();
+            itemsAdapter.notifyDataSetChanged();
+            beaconsToShow.addAll(Data.getBeaconsAfterScan());
+            itemsAdapter.notifyDataSetChanged();
+            Log.e("@@@", "хуяк");
+        }
+
         if(stickyEvent != null) {
             EventBus.getDefault().removeStickyEvent(stickyEvent);
             beaconsToShow.clear();
+            itemsAdapter.notifyDataSetChanged();
             beaconsToShow.addAll(Data.getBeaconsAfterScan());
             itemsAdapter.notifyDataSetChanged();
         }
