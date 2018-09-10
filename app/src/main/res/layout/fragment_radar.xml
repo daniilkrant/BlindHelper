@@ -12,4 +12,36 @@
         android:id="@+id/list">
     </android.support.v7.widget.RecyclerView>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:orientation="horizontal"
+        android:id="@+id/guide_layout"
+        android:visibility="gone">
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/guide_back_btn"
+            android:src="@drawable/baseline_fast_rewind_black_24dp"/>
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/guide_play_btn"
+            android:src="@drawable/baseline_pause_black_24dp"/>
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/guide_forward_btn"
+            android:src="@drawable/baseline_fast_forward_black_24dp"/>
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/guide_dive_into"
+            android:src="@drawable/baseline_get_app_black_24dp"/>
+    </LinearLayout>
+
 </LinearLayout>

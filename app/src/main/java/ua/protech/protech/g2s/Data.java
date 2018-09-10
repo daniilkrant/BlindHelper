@@ -25,6 +25,7 @@ public class Data {
     static final String IS_VIBRO = "is_vibro";
     static final String IS_AUTO_AUDIO = "is_auto_audio";
     static final String IS_AUDIO = "is_audio";
+    static final String IS_GUIDE = "is_guide";
     static final String IS_WENT_FROM_RADAR = "went_from_radar";
     static final String TAG = "BLINDHELPER";
     static final String BEACONS_FILE_NAME = "BLINDHELPER";

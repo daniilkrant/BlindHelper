@@ -28,10 +28,11 @@ import java.util.List;
 
 public class SettingsFragment extends Fragment {
 
-    private Button vibro_btn, db_btn, auto_sound_btn, feedback, sound_engine_btn, demo_sound_btn;
+    private Button vibro_btn, db_btn, guide_btn, auto_sound_btn, feedback, sound_engine_btn, demo_sound_btn;
     private Spinner signal_counter, cycle_counter;
     private Boolean vibro = true;
     private Boolean sound = true;
+    private Boolean guide = false;
     private Boolean auto_sound = false;
     private Boolean demo_sound = true;
     private SharedPreferences sharedPreferences;
@@ -54,6 +55,7 @@ public class SettingsFragment extends Fragment {
         auto_sound_btn = (Button) view.findViewById(R.id.sound_auto_btn);
         db_btn = (Button) view.findViewById(R.id.db_btn);
         feedback = (Button) view.findViewById(R.id.feedback);
+        guide_btn = (Button) view.findViewById(R.id.guide_btn);
         sound_engine_btn = (Button) view.findViewById(R.id.sound_engine_btn);
         demo_sound_btn = (Button) view.findViewById(R.id.demo_sound_btn);
         signal_counter = (Spinner) view.findViewById(R.id.signal_counter);
@@ -81,6 +83,28 @@ public class SettingsFragment extends Fragment {
             vibro_btn.setText(getString(R.string.vibro_off));
         }
 
+        if (sharedPreferences.getBoolean((Data.IS_GUIDE), false)){
+            guide = true;
+            guide_btn.setText("Режим гида включен");
+        } else {
+            guide = false;
+            guide_btn.setText("Режим гида выключен");
+        }
+
+        guide_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                guide = !guide;
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(Data.IS_GUIDE, guide);
+                editor.apply();
+                if (!guide) {
+                    demo_sound_btn.setText("Режим гида выключен");
+                } else {
+                    demo_sound_btn.setText("Режим гида включен");
+                }
+            }
+        });
 
         sound_engine_btn.setOnClickListener(new View.OnClickListener() {
             @Override

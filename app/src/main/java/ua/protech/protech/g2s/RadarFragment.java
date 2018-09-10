@@ -26,6 +26,7 @@ import java.util.ArrayList;
 public class RadarFragment extends Fragment {
 
     private RecyclerView listView;
+    private LinearLayout guide_view;
     private RadarFragment.ListAdapter itemsAdapter;
     private SharedPreferences sharedPreferences;
     private ArrayList<BlindBeacon> beaconsToShow = new ArrayList<>();
@@ -47,6 +48,7 @@ public class RadarFragment extends Fragment {
         beaconsToShow.addAll(Data.getBeaconsAfterScan());
         itemsAdapter = new ListAdapter(beaconsToShow);
         listView = (RecyclerView) view.findViewById(R.id.list);
+        guide_view = (LinearLayout) view.findViewById(R.id.guide_layout);
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
         listView.setAdapter(itemsAdapter);
         listView.setVisibility(View.VISIBLE);
@@ -85,7 +87,6 @@ public class RadarFragment extends Fragment {
             itemsAdapter.notifyDataSetChanged();
             beaconsToShow.addAll(Data.getBeaconsAfterScan());
             itemsAdapter.notifyDataSetChanged();
-            Log.e("@@@", "хуяк");
         }
 
         if(stickyEvent != null) {
@@ -95,6 +96,13 @@ public class RadarFragment extends Fragment {
             beaconsToShow.addAll(Data.getBeaconsAfterScan());
             itemsAdapter.notifyDataSetChanged();
         }
+
+        if (sharedPreferences.getBoolean((Data.IS_GUIDE), false)) {
+            guide_view.setVisibility(View.VISIBLE);
+        } else {
+            guide_view.setVisibility(View.GONE);
+        }
+
         super.onResume();
     }
 

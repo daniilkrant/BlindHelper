@@ -20,12 +20,12 @@
             android:layout_weight="1"
             android:id="@+id/vibro_btn"
             android:text="Вибрация включена"/>
-        <!--<Button-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:id="@+id/sound_btn"-->
-            <!--android:text="Озвучивание расширенного текста"/>-->
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/guide_btn"
+            android:text="Режим гида выключен"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="0dp"
