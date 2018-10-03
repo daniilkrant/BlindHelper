@@ -24,7 +24,8 @@ import java.util.ArrayList;
 
 public class BeaconDetailActivity extends AppCompatActivity {
     private TextView beacon_description, beacon_title, beacon_location, beacon_time, beacon_phone;
-    private Button beacon_route, btn_activate_sound, btn_add_to_fav;
+    private Button beacon_route;
+    private Button btn_add_to_fav;
     private String mac, ssid;
     private BlindBeacon blindBeacon;
     private SharedPreferences sharedPreferences;
@@ -45,7 +46,7 @@ public class BeaconDetailActivity extends AppCompatActivity {
         beacon_phone = (TextView) findViewById(R.id.beacon_phone);
         beacon_route = (Button) findViewById(R.id.btn_route_to_beac);
         btn_add_to_fav = (Button) findViewById(R.id.btn_add_to_fav);
-        btn_activate_sound = (Button) findViewById(R.id.btn_speak_to_user_beac);
+        Button btn_activate_sound = (Button) findViewById(R.id.btn_speak_to_user_beac);
         webView = (WebView) findViewById(R.id.web_view);
         webView.getSettings().setJavaScriptEnabled(true);
 
@@ -186,25 +187,26 @@ public class BeaconDetailActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] params) {
             Log.i(Data.TAG, ssid);
-            int i = 0;
-                WiFiRoutine.getInstance().disconnectCurrent();
+            WiFiRoutine.getInstance().disconnectCurrent();
             try {
                 Thread.sleep(800);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
             WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
                 WiFiRoutine.getInstance().connect(ssid);
                 while (true) {
                     String ipAddress = Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
-                    if (!ipAddress.equals("0.0.0.0")) {
+                    Log.e("@@@@IP:", "Waiting for IP " + ipAddress);
+                    if (!ipAddress.equals("0.0.0.0") && !ipAddress.isEmpty()) {
                         Log.e("@@@Ping:", "pinging...");
                         runOnUiThread(new Runnable() {
                             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                             @Override
                             public void run() {
                                 try {
-                                    Thread.sleep(5000);
+                                    Thread.sleep(1000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -212,7 +214,6 @@ public class BeaconDetailActivity extends AppCompatActivity {
                                         "/" + Data.sound_counter_list[sharedPreferences.getInt(Data.NUMBER_OF_SIGNALS_ARRAY_POSITION, 3)] + "/" + "1000" + "/" +
                                         Data.cycles_list[sharedPreferences.getInt(Data.NUMBER_OF_CYCLES_POSITION, 1)]+ "/&";
                                 Log.e("@@@URL:", url);
-                                webView.loadUrl(url);
                                 webView.setWebViewClient(new WebViewClient() {
                                     public void onPageFinished(WebView view, String url) {
                                         webView.evaluateJavascript("(function(){return window.document.body.outerHTML})();",
@@ -223,22 +224,15 @@ public class BeaconDetailActivity extends AppCompatActivity {
                                                     }
                                                 });
                                         Log.i("@@@" + Data.TAG, "disConnecting");
-                                        try {
-                                            Thread.sleep(1500);
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
                                         WiFiRoutine.getInstance().disconnect(ssid);
                                     }
                                 });
+                                webView.loadUrl(url);
                             }
                         });
                         break;
-                    } else {
-                        Log.e("@@@@IP:", "Waiting for IP " + ipAddress);
                     }
                 }
-                Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
             return null;
         }
     }

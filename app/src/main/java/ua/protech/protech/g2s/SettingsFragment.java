@@ -99,9 +99,9 @@ public class SettingsFragment extends Fragment {
                 editor.putBoolean(Data.IS_GUIDE, guide);
                 editor.apply();
                 if (!guide) {
-                    demo_sound_btn.setText("Режим гида выключен");
+                    guide_btn.setText("Режим гида выключен");
                 } else {
-                    demo_sound_btn.setText("Режим гида включен");
+                    guide_btn.setText("Режим гида включен");
                 }
             }
         });
