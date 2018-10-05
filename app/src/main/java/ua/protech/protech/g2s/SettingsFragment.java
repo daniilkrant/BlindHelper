@@ -358,9 +358,11 @@ public class SettingsFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Object o) {
-            Log.d(Data.TAG, Integer.toString(blindBeacons.size()));
-            db_btn.announceForAccessibility(getString(R.string.db_updated));
-            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.db_updated), Toast.LENGTH_LONG).show();
+            if (blindBeacons != null) {
+                Log.d(Data.TAG, Integer.toString(blindBeacons.size()));
+                db_btn.announceForAccessibility(getString(R.string.db_updated));
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.db_updated), Toast.LENGTH_LONG).show();
+            }
         }
     }
 }

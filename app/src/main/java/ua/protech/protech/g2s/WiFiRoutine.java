@@ -1,10 +1,13 @@
 package ua.protech.protech.g2s;
 
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiManager;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.isupatches.wisefy.WiseFy;
@@ -20,7 +23,7 @@ class WiFiRoutine {
     private Context c;
     private WiseFy mWiseFy = null;
 
-    private HashMap<String,String> pointsRegexList = new HashMap<String,String>();
+    private HashMap<String, String> pointsRegexList = new HashMap<String, String>();
 
     public static WiFiRoutine getInstance() {
         return ourInstance;
@@ -30,42 +33,46 @@ class WiFiRoutine {
 
     }
 
-    void initWifi(Context context){
+    void initWifi(Context context) {
+
         if (this.c == null) {
             this.c = context;
-            mWiseFy = new WiseFy.brains(c.getApplicationContext()).getSmarts();
+            mWiseFy = new WiseFy.Brains(c.getApplicationContext()).logging(true).getSmarts();
         }
     }
 
-     HashMap<String,String> getPointsRegex() {
-         final CountDownLatch latch = new CountDownLatch(1);
-         mWiseFy.getNearbyAccessPoints(true, new GetNearbyAccessPointsCallbacks() {
+    HashMap<String, String> getPointsRegex() {
+        final CountDownLatch latch = new CountDownLatch(1);
+        if (ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.e("TAG", "error");
+        }
+        mWiseFy.getNearbyAccessPoints(true, new GetNearbyAccessPointsCallbacks() {
             @Override
-            public void getNearbyAccessPointsWiseFyFailure(Integer wisefyReturnCode) {
+            public void wisefyFailure(int i) {
+                Log.e("TAG", Integer.toString(i));
             }
 
             @Override
             public void retrievedNearbyAccessPoints(List<ScanResult> nearbyAccessPoints) {
                 pointsRegexList.clear();
-                for (ScanResult s: nearbyAccessPoints){
-                    if (s.SSID.startsWith(Data.AP_SSID_PATTERN)){
-//                        pointsRegexList.put("5ECF7F3E1A9A",s.SSID);//TODO: REMOVE
-                      pointsRegexList.put(s.BSSID.toUpperCase().replace(":",""),s.SSID);
+                for (ScanResult s : nearbyAccessPoints) {
+                    if (s.SSID.startsWith(Data.AP_SSID_PATTERN)) {
+                        pointsRegexList.put(s.BSSID.toUpperCase().replace(":", ""), s.SSID);
                     }
                 }
                 latch.countDown();
             }
         });
 
-         try {
-             latch.await();
-         } catch (InterruptedException e) {
-             e.printStackTrace();
-         }
-         return pointsRegexList;
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return pointsRegexList;
     }
 
-    boolean connect(String ssid){
+    boolean connect(String ssid) {
         mWiseFy.addWPA2Network(ssid, Data.AP_PASS_PATTERN);
 //        Runnable r = new Runnable() {
 //            @Override
@@ -78,12 +85,14 @@ class WiFiRoutine {
         return mWiseFy.connectToNetwork(ssid, 1000);
     }
 
-    void disconnect(String ssid){
+    void disconnect(String ssid) {
         mWiseFy.removeNetwork(ssid);
         mWiseFy.disconnectFromCurrentNetwork();
     }
 
-    String get_curr(){
+    String get_curr() {
+        if (ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        }
         return mWiseFy.getCurrentNetwork().getSSID();
     }
 

@@ -188,11 +188,6 @@ public class BeaconDetailActivity extends AppCompatActivity {
         protected Object doInBackground(Object[] params) {
             Log.i(Data.TAG, ssid);
             WiFiRoutine.getInstance().disconnectCurrent();
-            try {
-                Thread.sleep(800);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
             WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
                 WiFiRoutine.getInstance().connect(ssid);
@@ -206,7 +201,7 @@ public class BeaconDetailActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 try {
-                                    Thread.sleep(1000);
+                                    Thread.sleep(500);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }

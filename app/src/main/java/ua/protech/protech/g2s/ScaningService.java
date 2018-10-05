@@ -71,12 +71,9 @@ public class ScaningService extends Service {
         else
             startForeground(740, notification);
 
-        scanningThread  = new Runnable() {
-            @Override
-            public void run() {
-                getNearbyBeacons();
-                Log.e("@@@@", "size: " + Integer.toString(beaconArrayList.size()));
-            }
+        scanningThread  = () -> {
+            getNearbyBeacons();
+            Log.e("@@@@", "size: " + Integer.toString(beaconArrayList.size()));
         };
 
         Timer timer = new Timer();
@@ -115,14 +112,11 @@ public class ScaningService extends Service {
         beaconArrayList.clear();
         BlindBeacon temp_beacon;
         HashMap<String,String> BSSID_list = WiFiRoutine.getInstance().getPointsRegex();
-
-        if (BSSID_list != null) {
-            beaconArrayList.clear();
-            for (Map.Entry<String, String> entry : BSSID_list.entrySet()) {
-                temp_beacon = Data.getBeaconInfo(entry.getKey());
-                temp_beacon.setSsid(entry.getValue());
-                beaconArrayList.add(temp_beacon);
-            }
+        beaconArrayList.clear();
+        for (Map.Entry<String, String> entry : BSSID_list.entrySet()) {
+            temp_beacon = Data.getBeaconInfo(entry.getKey());
+            temp_beacon.setSsid(entry.getValue());
+            beaconArrayList.add(temp_beacon);
         }
 
         Data.setBeaconsAfterScan(beaconArrayList);
