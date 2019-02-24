@@ -74,14 +74,6 @@ class WiFiRoutine {
 
     boolean connect(String ssid) {
         mWiseFy.addWPA2Network(ssid, Data.AP_PASS_PATTERN);
-//        Runnable r = new Runnable() {
-//            @Override
-//            public void run() {
-//                SupplicantState supplicantState;
-//                WifiManager wifiManager = (WifiManager) getSystem
-//            }
-//        };
-//        r.run();
         return mWiseFy.connectToNetwork(ssid, 1000);
     }
 

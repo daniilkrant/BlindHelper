@@ -37,7 +37,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:id="@+id/demo_sound_btn"
-            android:text="Программное озвучивание интерфейса отключено"/>
+            android:text="Программное озвучивание интерфейса включено"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="0dp"

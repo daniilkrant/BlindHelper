@@ -28,6 +28,7 @@ public class ServerRoutine {
         try {
             Response<ArrayList<BlindBeacon>> response =  call.execute();
             blindBeacons = response.body();
+            Log.e(Data.TAG, "success");
         } catch (IOException e) {
             blindBeacons = null;
             e.printStackTrace();

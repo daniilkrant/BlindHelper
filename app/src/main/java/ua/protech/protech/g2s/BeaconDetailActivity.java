@@ -196,6 +196,7 @@ public class BeaconDetailActivity extends AppCompatActivity {
                     Log.e("@@@@IP:", "Waiting for IP " + ipAddress);
                     if (!ipAddress.equals("0.0.0.0") && !ipAddress.isEmpty()) {
                         Log.e("@@@Ping:", "pinging...");
+
                         runOnUiThread(new Runnable() {
                             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                             @Override

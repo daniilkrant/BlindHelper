@@ -82,7 +82,7 @@ public class ScaningService extends Service {
             public void run() {
                 scanningThread.run();
             }
-        },0,4000);
+        },0, Data.getScanPeriod());
 
     }
 

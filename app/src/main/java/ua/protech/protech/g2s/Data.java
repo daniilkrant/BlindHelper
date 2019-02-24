@@ -1,6 +1,7 @@
 package ua.protech.protech.g2s;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -43,6 +44,14 @@ public class Data {
 
     public static void setBeaconsAfterScan(ArrayList<BlindBeacon> beaconsAfterScan) {
         Data.beaconsAfterScan = beaconsAfterScan;
+    }
+
+    public static int getScanPeriod() {
+        if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
+            return 31000;
+        } else {
+            return 4000;
+        }
     }
 
     //Serialization
