@@ -109,11 +109,11 @@ public class ScaningService extends Service {
     }
 
     public void getNearbyBeacons(){
-        beaconArrayList.clear();
         BlindBeacon temp_beacon;
         HashMap<String,String> BSSID_list = WiFiRoutine.getInstance().getPointsRegex();
         beaconArrayList.clear();
         for (Map.Entry<String, String> entry : BSSID_list.entrySet()) {
+            Log.e("@@@", entry.getKey() + "|" +entry.getValue());
             temp_beacon = Data.getBeaconInfo(entry.getKey());
             temp_beacon.setSsid(entry.getValue());
             beaconArrayList.add(temp_beacon);

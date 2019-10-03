@@ -37,7 +37,7 @@ class WiFiRoutine {
 
         if (this.c == null) {
             this.c = context;
-            mWiseFy = new WiseFy.Brains(c.getApplicationContext()).logging(true).getSmarts();
+            mWiseFy = new WiseFy.Brains(c.getApplicationContext()).logging(false).getSmarts();
         }
     }
 

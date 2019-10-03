@@ -247,4 +247,21 @@ public class BlindBeacon implements Parcelable, Serializable {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public String toString() {
+        return "BlindBeacon{" +
+                "uuid='" + uuid + '\'' +
+                ", description='" + description + '\'' +
+                ", name='" + name + '\'' +
+                ", lng='" + lng + '\'' +
+                ", lat='" + lat + '\'' +
+                ", addr='" + addr + '\'' +
+                ", net_name='" + net_name + '\'' +
+                ", phone_numb='" + phone_numb + '\'' +
+                ", working_time='" + working_time + '\'' +
+                ", ssid='" + ssid + '\'' +
+                ", isFav=" + isFav +
+                '}';
+    }
 }
