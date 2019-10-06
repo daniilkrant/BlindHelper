@@ -50,6 +50,7 @@ public class BlindBeacon implements Parcelable, Serializable {
     private String ssid;
     private static final long serialVersionUID = 4654897646L;
     private int isFav = 0;
+    private boolean isBt = false;
 
     private BlindBeacon(Parcel in) {
         uuid = in.readString();
@@ -94,6 +95,14 @@ public class BlindBeacon implements Parcelable, Serializable {
             phone_numb = "";
             isFav = 0;
         }
+    }
+
+    public boolean isBt() {
+        return isBt;
+    }
+
+    public void setBt(boolean bt) {
+        isBt = bt;
     }
 
     public int isFav() {

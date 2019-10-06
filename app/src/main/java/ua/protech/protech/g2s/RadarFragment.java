@@ -45,7 +45,7 @@ public class RadarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_radar, container, false);
-        beaconsToShow.addAll(Data.getBeaconsAfterScan());
+        beaconsToShow.addAll(Data.getAggregatedBeaconsList());
         itemsAdapter = new ListAdapter(beaconsToShow);
         listView = (RecyclerView) view.findViewById(R.id.list);
         guide_view = (LinearLayout) view.findViewById(R.id.guide_layout);
@@ -57,8 +57,10 @@ public class RadarFragment extends Fragment {
             @Override
             public void onClick(View view, int pos) {
                 Intent i = new Intent(getContext(), BeaconDetailActivity.class);
-                i.putExtra(Data.PASS_MAC, Data.getBeaconsAfterScan().get(pos).getUuid());
-                i.putExtra(Data.PASS_SSID, Data.getBeaconsAfterScan().get(pos).getSsid());
+                i.putExtra(Data.PASS_MAC, Data.getAggregatedBeaconsList().get(pos).getUuid());
+                i.putExtra(Data.PASS_SSID, Data.getAggregatedBeaconsList().get(pos).getSsid());
+                i.putExtra(Data.PASS_NAME, Data.getAggregatedBeaconsList().get(pos).getName());
+                i.putExtra(Data.PASS_ISBT, Data.getAggregatedBeaconsList().get(pos).isBt());
                 i.putExtra(Data.IS_WENT_FROM_RADAR, true);
                 startActivity(i);
             }
@@ -66,7 +68,7 @@ public class RadarFragment extends Fragment {
             @Override
             public void onLongClick(View view, int pos) {
                 if (sharedPreferences.getBoolean((Data.DEMO_SOUND), true)) {
-                    TTS.getInstance().speakWords("Маяк: " + Data.getBeaconsAfterScan().get(pos).getName());
+                    TTS.getInstance().speakWords("Маяк: " + Data.getWifiBeaconsList().get(pos).getName());
                 }
             }
         }));
@@ -85,7 +87,7 @@ public class RadarFragment extends Fragment {
         {
             beaconsToShow.clear();
             itemsAdapter.notifyDataSetChanged();
-            beaconsToShow.addAll(Data.getBeaconsAfterScan());
+            beaconsToShow.addAll(Data.getAggregatedBeaconsList());
             itemsAdapter.notifyDataSetChanged();
         }
 
@@ -93,7 +95,7 @@ public class RadarFragment extends Fragment {
             EventBus.getDefault().removeStickyEvent(stickyEvent);
             beaconsToShow.clear();
             itemsAdapter.notifyDataSetChanged();
-            beaconsToShow.addAll(Data.getBeaconsAfterScan());
+            beaconsToShow.addAll(Data.getAggregatedBeaconsList());
             itemsAdapter.notifyDataSetChanged();
         }
 
@@ -108,8 +110,9 @@ public class RadarFragment extends Fragment {
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ServiceMessages event) {
+        itemsAdapter.notifyDataSetChanged();
         beaconsToShow.clear();
-        beaconsToShow.addAll(Data.getBeaconsAfterScan());
+        beaconsToShow.addAll(Data.getAggregatedBeaconsList());
         itemsAdapter.notifyDataSetChanged();
         for (BlindBeacon b: beaconsToShow) {
             Log.e("@@@", b.toString());

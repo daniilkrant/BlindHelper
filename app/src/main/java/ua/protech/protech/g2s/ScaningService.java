@@ -6,38 +6,38 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.Vibrator;
-import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.annotation.security.RunAs;
-
 public class ScaningService extends Service {
-    private ArrayList<BlindBeacon> beaconArrayList = new ArrayList<>();
+    private static final int REQUEST_ENABLE_BT = 2;
+    private ArrayList<BlindBeacon> wifiBeacons = new ArrayList<>();
+    private ArrayList<BlindBeacon> btBeacons = new ArrayList<>();
     private int last_size = 0;
     private Vibrator v;
     private SharedPreferences sharedPreferences;
     private Runnable scanningThread;
-
-    private PendingIntent pendingIntent;
+    private BluetoothAdapter bluetoothAdapter;
 
     public ScaningService() {
     }
@@ -52,6 +52,7 @@ public class ScaningService extends Service {
         super.onCreate();
         sharedPreferences = getSharedPreferences(Data.SETTINGS_FILE_SHARED_PREF, Context.MODE_PRIVATE);
         WiFiRoutine.getInstance().initWifi(getApplicationContext());
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         String tts_engine = sharedPreferences.getString(Data.TTS_ENGINE, "empty");
         if (!tts_engine.equals("empty"))
@@ -72,8 +73,8 @@ public class ScaningService extends Service {
             startForeground(740, notification);
 
         scanningThread  = () -> {
-            getNearbyBeacons();
-            Log.e("@@@@", "size: " + Integer.toString(beaconArrayList.size()));
+            getNearbyWiFiBeacons();
+            getNearbyBtBeacons();
         };
 
         Timer timer = new Timer();
@@ -108,32 +109,81 @@ public class ScaningService extends Service {
         startForeground(741, notification);
     }
 
-    public void getNearbyBeacons(){
+    public void getNearbyBtBeacons() {
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+
+        final BroadcastReceiver receiver = new BroadcastReceiver() {
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+
+                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    if (device.getName() != null &&
+                            device.getName().startsWith(Data.AP_SSID_PATTERN)) {
+                        Log.e("@@@", "found");
+                        String deviceName = device.getName();
+                        BlindBeacon blindBeacon = new BlindBeacon(false);
+                        blindBeacon.uuid = device.getAddress();
+                        blindBeacon.name = deviceName + " Bluetooth";
+                        blindBeacon.setSsid(deviceName);
+                        blindBeacon.setBt(true);
+                        btBeacons.add(blindBeacon);
+
+
+                        Data.setBtBeaconsList(btBeacons);
+                        checkForNewBeacons();
+                    }
+                }
+            }
+        };
+
+        registerReceiver(receiver, filter);
+        bluetoothAdapter.startDiscovery();
+
+//        Set<BluetoothDevice> knownDevices = bluetoothAdapter.getBondedDevices();
+//
+//        if (knownDevices.size() > 0) {
+//            btBeacons.clear();
+//            for (BluetoothDevice device : knownDevices) {
+//                String deviceName = device.getName();
+//
+//                if (deviceName.startsWith(Data.AP_SSID_PATTERN)) {
+//                    BlindBeacon blindBeacon = new BlindBeacon(false);
+//                    blindBeacon.uuid = device.getAddress();
+//                    blindBeacon.name = deviceName + " Bluetooth";
+//                    blindBeacon.setSsid(deviceName);
+//                    blindBeacon.setBt(true);
+//                    btBeacons.add(blindBeacon);
+//                }
+//            }
+//            Data.setBtBeaconsList(btBeacons);
+//            checkForNewBeacons();
+    }
+
+    public void getNearbyWiFiBeacons(){
         BlindBeacon temp_beacon;
         HashMap<String,String> BSSID_list = WiFiRoutine.getInstance().getPointsRegex();
-        beaconArrayList.clear();
+        wifiBeacons.clear();
         for (Map.Entry<String, String> entry : BSSID_list.entrySet()) {
-            Log.e("@@@", entry.getKey() + "|" +entry.getValue());
-            temp_beacon = Data.getBeaconInfo(entry.getKey());
+            temp_beacon = Data.getBeaconInfoByMac(entry.getKey());
             temp_beacon.setSsid(entry.getValue());
-            beaconArrayList.add(temp_beacon);
+            wifiBeacons.add(temp_beacon);
         }
 
-        Data.setBeaconsAfterScan(beaconArrayList);
+        Data.setWifiBeaconsList(wifiBeacons);
         checkForNewBeacons();
     }
 
     private void checkForNewBeacons() {
-        int current_size = beaconArrayList.size();
-        if (current_size != last_size)
-            EventBus.getDefault().postSticky(new ServiceMessages("Update"));
+        EventBus.getDefault().postSticky(new ServiceMessages("Update"));
+        int current_size = Data.getAggregatedBeaconsList().size();
 
         if (current_size > last_size) {
             if (sharedPreferences.getBoolean((Data.IS_VIBRO), true)) {
                 v.vibrate(1500);
             }
             if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
-                TTS.getInstance().speakWords(getString(R.string.found_new_beacon) + Integer.toString(beaconArrayList.size() - last_size));
+                TTS.getInstance().speakWords(getString(R.string.found_new_beacon) + (Data.getAggregatedBeaconsList().size() - last_size));
             }
         }
 
@@ -141,18 +191,22 @@ public class ScaningService extends Service {
             if (sharedPreferences.getBoolean((Data.IS_AUDIO), true)) {
                 String message = getString(R.string.beacon_find);
                 TTS.getInstance().speakWords(message);
-                for (int i = 0; i < beaconArrayList.size(); i++) {
-                    TTS.getInstance().speakWords(beaconArrayList.get(i).getName());
+                for (int i = 0; i < wifiBeacons.size(); i++) {
+                    TTS.getInstance().speakWords(wifiBeacons.get(i).getName());
+                    TTS.getInstance().silence();
+                }
+                for (int i = 0; i < btBeacons.size(); i++) {
+                    TTS.getInstance().speakWords(btBeacons.get(i).getName());
                     TTS.getInstance().silence();
                 }
             }
         }
 
-        last_size = beaconArrayList.size();
+        last_size = Data.getAggregatedBeaconsList().size();
     }
 
     public ArrayList<BlindBeacon> getBeaconsList() {
-        return beaconArrayList;
+        return wifiBeacons;
     }
 
     @Override

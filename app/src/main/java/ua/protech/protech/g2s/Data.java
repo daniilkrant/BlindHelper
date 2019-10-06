@@ -3,12 +3,9 @@ package ua.protech.protech.g2s;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Data {
     static final String AP_SSID_PATTERN = "BlindHelper";
@@ -16,6 +13,8 @@ public class Data {
     static final String API_BASE_URL = "http://braille-device.com/iBeacon/";
     static final String PASS_MAC = "mac";
     static final String PASS_SSID = "ssid";
+    static final String PASS_NAME = "name";
+    static final String PASS_ISBT = "isbt";
     static final String NUMBER_OF_SIGNALS_ARRAY_POSITION = "number_of_signals_array_position";
     static final String NUMBER_OF_CYCLES_POSITION = "NUMBER_OF_CYCLES_POSITION";
     static final String NUMBER_OF_SIGNALS = "number_of_signals";
@@ -33,24 +32,43 @@ public class Data {
     static final String[] cycles_list = {"1","2","3","5","10","15"};
     static final String[] sound_counter_list= {"1","2","3","4","5","7","10","15","20"};
 
-    private static ArrayList<BlindBeacon> beaconsAfterScan;
+    private static ArrayList<BlindBeacon> wifiBeaconsList = new ArrayList<>();
+    private static ArrayList<BlindBeacon> btBeaconsList = new ArrayList<>();
+    private static ArrayList<BlindBeacon> aggregatedBeaconsList = new ArrayList<>();
 
-    public static ArrayList<BlindBeacon> getBeaconsAfterScan() {
-        if (beaconsAfterScan == null) {
+    public static ArrayList<BlindBeacon> getAggregatedBeaconsList() {
+        aggregatedBeaconsList.clear();
+        aggregatedBeaconsList.addAll(wifiBeaconsList);
+        aggregatedBeaconsList.addAll(btBeaconsList);
+
+        return aggregatedBeaconsList;
+    }
+
+    public static ArrayList<BlindBeacon> getWifiBeaconsList() {
+        if (wifiBeaconsList == null) {
             return new ArrayList<BlindBeacon>();
         }
-        return beaconsAfterScan;
+        return wifiBeaconsList;
     }
 
-    public static void setBeaconsAfterScan(ArrayList<BlindBeacon> beaconsAfterScan) {
-        Data.beaconsAfterScan = beaconsAfterScan;
+    public static void setWifiBeaconsList(ArrayList<BlindBeacon> wifiBeaconsList) {
+        Data.wifiBeaconsList = wifiBeaconsList;
     }
+
+    public static ArrayList<BlindBeacon> getBtBeaconsList() {
+        return btBeaconsList;
+    }
+
+    public static void setBtBeaconsList(ArrayList<BlindBeacon> btBeaconsList) {
+        Data.btBeaconsList = btBeaconsList;
+    }
+
 
     public static int getScanPeriod() {
         if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
             return 31000;
         } else {
-            return 4000;
+            return 15000;
         }
     }
 
@@ -74,10 +92,21 @@ public class Data {
     }
 
     @NonNull
-    public static BlindBeacon getBeaconInfo(String mac){
+    public static BlindBeacon getBeaconInfoByMac(String mac){
         if (serialized_beacons != null) {
             for (BlindBeacon b : serialized_beacons) {
                 if (b.getUuid().equals(mac))
+                    return b;
+            }
+        }
+        return new BlindBeacon(false); //ideally unreachable, return mock
+    }
+
+    @NonNull
+    public static BlindBeacon getBeaconInfoByName(String name){
+        if (serialized_beacons != null) {
+            for (BlindBeacon b : serialized_beacons) {
+                if (b.getName().equals(name))
                     return b;
             }
         }
