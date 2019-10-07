@@ -236,7 +236,7 @@ public class BeaconDetailActivity extends AppCompatActivity {
             // Let's send a message:
             String msg = "GET //" + "220" + "/" + "200" + "/" + "300" +
                     "/" + Data.sound_counter_list[sharedPreferences.getInt(Data.NUMBER_OF_SIGNALS_ARRAY_POSITION, 3)] + "/" + "1000" + "/" +
-                    Data.cycles_list[sharedPreferences.getInt(Data.NUMBER_OF_CYCLES_POSITION, 1)]+ "/&";
+                    Data.cycles_list[sharedPreferences.getInt(Data.NUMBER_OF_CYCLES_POSITION, 1)]+ "/&\n";
             deviceInterface.sendMessage(msg);
         }
     }

@@ -115,7 +115,7 @@ public class RadarFragment extends Fragment {
         beaconsToShow.addAll(Data.getAggregatedBeaconsList());
         itemsAdapter.notifyDataSetChanged();
         for (BlindBeacon b: beaconsToShow) {
-            Log.e("@@@", b.toString());
+            Log.e("@@@beaconsToShow", b.toString());
         }
     }
 

@@ -116,7 +116,6 @@ public class ScaningService extends Service {
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
                 if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-
                     BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     if (device.getName() != null &&
                             device.getName().startsWith(Data.AP_SSID_PATTERN)) {
@@ -128,7 +127,6 @@ public class ScaningService extends Service {
                         blindBeacon.setSsid(deviceName);
                         blindBeacon.setBt(true);
                         btBeacons.add(blindBeacon);
-
 
                         Data.setBtBeaconsList(btBeacons);
                         checkForNewBeacons();

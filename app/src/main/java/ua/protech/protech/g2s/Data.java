@@ -60,6 +60,9 @@ public class Data {
     }
 
     public static void setBtBeaconsList(ArrayList<BlindBeacon> btBeaconsList) {
+        if (Data.btBeaconsList != null) {
+            Data.btBeaconsList.clear();
+        }
         Data.btBeaconsList = btBeaconsList;
     }
 
